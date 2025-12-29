@@ -65,18 +65,18 @@ struct FetchService {
         else {
             throw FetchError.badResponse
         }
-        
+
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
-        
+
         let deaths = try decoder.decode([Death].self, from: data)
-        
+
         for death in deaths {
-            if (death.character == character) {
+            if death.character == character {
                 return death
             }
         }
-        
+
         return nil
     }
 }
