@@ -14,7 +14,8 @@ class ViewModel {
     private let fetcher = FetchService()
     var quote: Quote
     var character: Char
-
+    var episode: Episode
+    
     // Initialize with sample data
     init() {
         let decoder = JSONDecoder()
@@ -26,7 +27,7 @@ class ViewModel {
             )!
         )
         quote = try! decoder.decode(Quote.self, from: quoteData)
-
+        
         let charData = try! Data(
             contentsOf: Bundle.main.url(
                 forResource: "samplecharacter",
@@ -34,9 +35,17 @@ class ViewModel {
             )!
         )
         character = try! decoder.decode(Char.self, from: charData)
+        
+        let episodeData = try! Data(
+            contentsOf: Bundle.main.url(
+                forResource: "sampleepisode",
+                withExtension: "json"
+            )!
+        )
+        episode = try! decoder.decode(Episode.self, from: episodeData)
     }
     
-    func getData(for show: String) async {
+    func getQuoteData(for show: String) async {
         status = .fetching
         
         do {
@@ -46,16 +55,31 @@ class ViewModel {
             
             character.death = try await fetcher.fetchDeath(for: character.name)
             
-            status = .success
+            status = .successQuote
         } catch {
             status = .failure(error: error)
         }
+    }
+    
+    func getEpisodeData(for show: String) async {
+        status = .fetching
+        
+        do {
+            if let episodeFromAPI = try await fetcher.fetchEpisode(from: show) {
+                episode = episodeFromAPI
+            }
+            status = .successEpisode
+        } catch {
+            status = .failure(error: error)
+        }
+        
     }
 }
 
 enum FetchStatus {
     case notStarted
     case fetching
-    case success
+    case successQuote
+    case successEpisode
     case failure(error: Error)
 }

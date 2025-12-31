@@ -1,5 +1,5 @@
 //
-//  QuoteView.swift
+//  MainView.swift
 //  BBQuotes
 //
 //  Created by Mahesh Bansode on 31/12/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct QuoteView: View {
+struct MainView: View {
     let show: String
     let vm = ViewModel()
     @State var characterDetailsSheet = false
@@ -27,7 +27,7 @@ struct QuoteView: View {
                             EmptyView()
                         case .fetching:
                             ProgressView()
-                        case .success:
+                        case .successQuote:
                             Text("\"\(vm.quote.quote)\"")
                                 .padding()
                                 .background(.black.opacity(0.6))
@@ -59,24 +59,41 @@ struct QuoteView: View {
                             .onTapGesture {
                                 characterDetailsSheet.toggle()
                             }
+                        case .successEpisode:
+                            EpisodeView(episode: vm.episode)
                         case .failure(let error):
                             Text("Error: \(error.localizedDescription)")
                         }
                     }
                     .padding(.bottom, 24)
                     
-                    Button {
-                        Task {
-                            await vm.getData(for: show)
+                    HStack {
+                        Button {
+                            Task {
+                                await vm.getQuoteData(for: show)
+                            }
+                        } label: {
+                            Text("Random Quote")
+                                .tint(.white)
+                                .font(.title)
+                                .padding(8)
+                                .frame(maxWidth: geo.size.width * 0.8)
+                                .clipShape(.rect(cornerRadius: 16))
+                                .glassEffect()
                         }
-                    } label: {
-                        Text("New Quote")
-                            .tint(.white)
-                            .font(.title)
-                            .padding(8)
-                            .frame(maxWidth: geo.size.width * 0.8)
-                            .clipShape(.rect(cornerRadius: 16))
-                            .glassEffect()
+                        Button {
+                            Task {
+                                await vm.getEpisodeData(for: show)
+                            }
+                        } label: {
+                            Text("Random Episode")
+                                .tint(.white)
+                                .font(.title)
+                                .padding(8)
+                                .frame(maxWidth: geo.size.width * 0.8)
+                                .clipShape(.rect(cornerRadius: 16))
+                                .glassEffect()
+                        }
                     }
                     Spacer(minLength: 92)
                 }
@@ -93,6 +110,6 @@ struct QuoteView: View {
 }
 
 #Preview {
-    QuoteView(show: Constants.bbName)
+    MainView(show: Constants.bbName)
         .preferredColorScheme(.dark)
 }
