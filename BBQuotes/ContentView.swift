@@ -10,17 +10,17 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         TabView {
-            Tab("Breaking Bad", systemImage: "tortoise") {
-                QuoteView(show: "Breaking Bad")
+            Tab(Constants.bbName, systemImage: "tortoise") {
+                QuoteView(show: Constants.bbName)
 
             }
 
-            Tab("Better Call Saul", systemImage: "briefcase") {
-                QuoteView(show: "Better Call Saul")
+            Tab(Constants.bcsName, systemImage: "briefcase") {
+                QuoteView(show: Constants.bcsName)
             }
             
-            Tab("EL Camino", systemImage: "car") {
-                QuoteView(show: "El Camino")
+            Tab(Constants.ecName, systemImage: "car") {
+                QuoteView(show: Constants.ecName)
             }
         }
         .preferredColorScheme(.dark)

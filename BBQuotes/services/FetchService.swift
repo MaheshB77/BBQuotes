@@ -8,7 +8,7 @@
 import Foundation
 
 struct FetchService {
-    let baseURL = URL(string: "https://breaking-bad-api-six.vercel.app/api")!
+    let baseURL = URL(string: Constants.baseUrl)!
 
     func fetchQuote(from show: String) async throws -> Quote {
         // Build fetch url

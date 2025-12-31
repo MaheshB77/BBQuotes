@@ -15,7 +15,7 @@ struct QuoteView: View {
     var body: some View {
         GeometryReader { geo in
             ZStack {
-                Image(show.lowercased().replacingOccurrences(of: " ", with: ""))
+                Image(show.removeSpacesAndLowercased())
                     .resizable()
                     .scaledToFill()
                 
@@ -93,6 +93,6 @@ struct QuoteView: View {
 }
 
 #Preview {
-    QuoteView(show: "Breaking Bad")
+    QuoteView(show: Constants.bbName)
         .preferredColorScheme(.dark)
 }

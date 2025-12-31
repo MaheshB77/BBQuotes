@@ -14,7 +14,7 @@ struct CharacterView: View {
         GeometryReader { geo in
             ScrollViewReader { proxy in
                 ZStack(alignment: .top) {
-                    Image(show.lowercased().replacingOccurrences(of: " ", with: ""))
+                    Image(show.removeSpacesAndLowercased())
                         .resizable()
                         .scaledToFit()
                     
@@ -118,5 +118,5 @@ struct CharacterView: View {
 }
 
 #Preview {
-    CharacterView(character: ViewModel().character, show: "Breaking Bad")
+    CharacterView(character: ViewModel().character, show: Constants.bbName)
 }
