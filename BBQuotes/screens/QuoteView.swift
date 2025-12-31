@@ -10,6 +10,7 @@ import SwiftUI
 struct QuoteView: View {
     let show: String
     let vm = ViewModel()
+    @State var characterDetailsSheet = false
 
     var body: some View {
         GeometryReader { geo in
@@ -19,39 +20,54 @@ struct QuoteView: View {
                     .scaledToFill()
 
                 VStack {
-                    Spacer(minLength: 60)
-                    Text("\"\(vm.quote.quote)\"")
-                        .padding()
-                        .background(.black.opacity(0.6))
-                        .clipShape(.rect(cornerRadius: 16))
-                        .multilineTextAlignment(.center)
-                        .minimumScaleFactor(0.5)
-                    
-
-                    ZStack(alignment: .bottom) {
-                        AsyncImage(url: vm.character.images[0]) { img in
-                            img
-                                .resizable()
-                                .scaledToFill()
-                        } placeholder: {
+                    VStack {
+                        Spacer(minLength: 60)
+                        switch vm.status {
+                        case .notStarted:
+                            EmptyView()
+                        case .fetching:
                             ProgressView()
-                        }
-                        .frame(
-                            width: geo.size.width * 0.9,
-                            height: geo.size.height / 1.8
-                        )
-
-                        Text(vm.character.name)
-                            .padding(8)
-                            .foregroundStyle(.white)
-                            .frame(maxWidth: .infinity)
-                            .background(.ultraThinMaterial)
+                        case .success:
+                            Text("\"\(vm.quote.quote)\"")
+                                .padding()
+                                .background(.black.opacity(0.6))
+                                .clipShape(.rect(cornerRadius: 16))
+                                .multilineTextAlignment(.center)
+                                .minimumScaleFactor(0.5)
                             
+                            ZStack(alignment: .bottom) {
+                                AsyncImage(url: vm.character.images[0]) { img in
+                                    img
+                                        .resizable()
+                                        .scaledToFill()
+                                } placeholder: {
+                                    ProgressView()
+                                }
+                                .frame(
+                                    width: geo.size.width * 0.9,
+                                    height: geo.size.height / 1.8
+                                )
+                                
+                                Text(vm.character.name)
+                                    .padding(8)
+                                    .foregroundStyle(.white)
+                                    .frame(maxWidth: .infinity)
+                                    .background(.ultraThinMaterial)
+                                
+                            }
+                            .clipShape(.rect(cornerRadius: 16))
+                            .onTapGesture {
+                                characterDetailsSheet.toggle()
+                            }
+                        case .failure(let error):
+                            Text("Error: \(error.localizedDescription)")
+                        }
                     }
-                    .clipShape(.rect(cornerRadius: 16))
-
+                    
                     Button {
-
+                        Task {
+                            await vm.getData(for: show)
+                        }
                     } label: {
                         Text("New Quote")
                             .tint(.white)
@@ -69,6 +85,9 @@ struct QuoteView: View {
             .frame(width: geo.size.width, height: geo.size.height)
         }
         .ignoresSafeArea()
+        .sheet(isPresented: $characterDetailsSheet) {
+            CharacterView(character: vm.character, show: show)
+        }
     }
 }
 

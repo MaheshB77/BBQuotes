@@ -35,6 +35,22 @@ class ViewModel {
         )
         character = try! decoder.decode(Char.self, from: charData)
     }
+    
+    func getData(for show: String) async {
+        status = .fetching
+        
+        do {
+            quote = try await fetcher.fetchQuote(from: show)
+            
+            character = try await fetcher.fetchCharacter(quote.character)
+            
+            character.death = try await fetcher.fetchDeath(for: character.name)
+            
+            status = .success
+        } catch {
+            status = .failure(error: error)
+        }
+    }
 }
 
 enum FetchStatus {
