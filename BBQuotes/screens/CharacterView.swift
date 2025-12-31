@@ -67,6 +67,7 @@ struct CharacterView: View {
                 }
                 .frame(width: geo.size.width * 0.9)
                 .padding(.bottom)
+                .scrollIndicators(.hidden)
             }
             .ignoresSafeArea()
         }
