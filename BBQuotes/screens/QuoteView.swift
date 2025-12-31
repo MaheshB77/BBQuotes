@@ -11,14 +11,14 @@ struct QuoteView: View {
     let show: String
     let vm = ViewModel()
     @State var characterDetailsSheet = false
-
+    
     var body: some View {
         GeometryReader { geo in
             ZStack {
                 Image(show.lowercased().replacingOccurrences(of: " ", with: ""))
                     .resizable()
                     .scaledToFill()
-
+                
                 VStack {
                     VStack {
                         Spacer(minLength: 60)
@@ -47,7 +47,6 @@ struct QuoteView: View {
                                     width: geo.size.width * 0.9,
                                     height: geo.size.height / 1.8
                                 )
-                                
                                 Text(vm.character.name)
                                     .padding(8)
                                     .foregroundStyle(.white)
@@ -56,6 +55,7 @@ struct QuoteView: View {
                                 
                             }
                             .clipShape(.rect(cornerRadius: 16))
+                            .padding(.top, 24)
                             .onTapGesture {
                                 characterDetailsSheet.toggle()
                             }
@@ -63,24 +63,25 @@ struct QuoteView: View {
                             Text("Error: \(error.localizedDescription)")
                         }
                     }
+                    .padding(.bottom, 24)
                     
                     Button {
                         Task {
                             await vm.getData(for: show)
                         }
                     } label: {
-                        Text("New Quote")
-                            .tint(.white)
-                            .font(.title)
-                            .padding(8)
-                            .frame(maxWidth: geo.size.width * 0.6)
-                            .clipShape(.rect(cornerRadius: 16))
-                            .glassEffect()
+                                Text("New Quote")
+                                    .tint(.white)
+                                    .font(.title)
+                                    .padding(8)
+                                    .frame(maxWidth: geo.size.width * 0.6)
+                                    .clipShape(.rect(cornerRadius: 16))
+                                    .glassEffect()
                     }
                     Spacer(minLength: 92)
                 }
                 .frame(width: geo.size.width * 0.9)
-
+                
             }
             .frame(width: geo.size.width, height: geo.size.height)
         }

@@ -60,7 +60,31 @@ struct CharacterView: View {
                             Text("None")
                         }
                         Divider()
-
+                        
+                        DisclosureGroup("Status: (spoiler alert!)") {
+                            VStack {
+                                Text(character.status)
+                                    .font(.title2)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            if let death = character.death {
+                                AsyncImage(url: death.image) { img in
+                                    img
+                                        .resizable()
+                                        .scaledToFit()
+                                        .clipShape(.rect(cornerRadius: 16))
+                                } placeholder: {
+                                    ProgressView()
+                                }
+                                
+                                Text("Cause of Death: \(death.details)")
+                                    .padding(.bottom, 8)
+                                
+                                Text("Last Words: \(death.lastWords)")
+                            }
+                        }
+                        .foregroundStyle(.primary)
                     }
                     .frame(width: geo.size.width * 0.8, alignment: .leading)
 
