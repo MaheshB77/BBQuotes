@@ -70,13 +70,13 @@ struct QuoteView: View {
                             await vm.getData(for: show)
                         }
                     } label: {
-                                Text("New Quote")
-                                    .tint(.white)
-                                    .font(.title)
-                                    .padding(8)
-                                    .frame(maxWidth: geo.size.width * 0.6)
-                                    .clipShape(.rect(cornerRadius: 16))
-                                    .glassEffect()
+                        Text("New Quote")
+                            .tint(.white)
+                            .font(.title)
+                            .padding(8)
+                            .frame(maxWidth: geo.size.width * 0.8)
+                            .clipShape(.rect(cornerRadius: 16))
+                            .glassEffect()
                     }
                     Spacer(minLength: 92)
                 }
