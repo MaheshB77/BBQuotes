@@ -52,7 +52,6 @@ struct Char: Decodable {
                     withExtension: "json"
                 )!
             )
-            print("Decoding death data for character: \(name)")
             death = try deathDecoder.decode(Death.self, from: deathData)
         } catch {
             print("Failed to decode death data for character \(name): \(error)")
